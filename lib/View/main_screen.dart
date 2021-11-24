@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 void main() => runApp(const MyApp());
 
@@ -44,7 +46,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   Widget build(BuildContext context) {
     final ButtonStyle style =
     ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
-
+    ImagePicker picker = ImagePicker();
+    File file;
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -54,21 +57,36 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               primary: Color(0xFF355C7D), // background
               onPrimary: Colors.white, // foreground
             ),
-            onPressed: (){
+            onPressed: () async{
+              //take photo
+              XFile? photo = await picker.pickImage(source: ImageSource.camera);
 
+              //convert the photo to a file object
+              file = File(photo!.path);
 
+              //pass the image to get processed
+              //Navigator.push(context, MaterialPageRoute(builder: (context) => ResultsScreen(photo)));
             },
             child: const Text('Take Picture'),
           ),
+
+
+
           const SizedBox(height: 30),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               primary: Color(0xFF355C7D), // background
               onPrimary: Colors.white, // foreground
             ),
-            onPressed: () {
+            onPressed: () async{
+              //select photo from gallery
+              XFile? photo = await picker.pickImage(source: ImageSource.gallery);
 
+              //Convert the image to a File object
+              file = File(photo!.path);
 
+              //pass the image to get processed
+              //Navigator.push(context, MaterialPageRoute(builder: (context) => ResultsScreen(photo)));
             },
             child: const Text('Select from Gallery'),
           ),
