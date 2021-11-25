@@ -1,3 +1,4 @@
+import 'package:digit_classifier/View/results_screen.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -62,7 +63,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               file = File(photo!.path);
 
               //pass the image to get processed
-              //Navigator.push(context, MaterialPageRoute(builder: (context) => ResultsScreen(photo)));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ResultsScreen(file)));
             },
             child: Container(
               decoration: BoxDecoration(
@@ -115,7 +116,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               file = File(photo!.path);
 
               //pass the image to get processed
-              //Navigator.push(context, MaterialPageRoute(builder: (context) => ResultsScreen(photo)));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ResultsScreen(file)));
             },
             child: const Text('Select from Gallery'),
           ),
