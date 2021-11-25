@@ -52,12 +52,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Color(0xFF355C7D), // background
-              onPrimary: Colors.white, // foreground
-            ),
-            onPressed: () async{
+          InkWell(
+
+            onTap: () async{
               //take photo
               XFile? photo = await picker.pickImage(source: ImageSource.camera);
 
@@ -67,7 +64,39 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               //pass the image to get processed
               //Navigator.push(context, MaterialPageRoute(builder: (context) => ResultsScreen(photo)));
             },
-            child: const Text('Take Picture'),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: Colors.blue.withOpacity(0.1),
+                    blurRadius: 1,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(
+                  vertical: 14, horizontal: 16),
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Take Photo',
+                    style: TextStyle(color: Color(0xFF0F0BDB)),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Icon(Icons.add_a_photo_outlined, color: Color(0xFF0F0BDB))
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
           ),
 
 
