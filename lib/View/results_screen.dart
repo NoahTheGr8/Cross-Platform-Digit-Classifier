@@ -40,7 +40,7 @@ class ResultsScreenState extends State<ResultsScreen> {
     _output = await Tflite.runModelOnImage(
       path: image.path,
       numResults: 5,
-      threshold: 0.7,
+      threshold: 0,
       imageMean: 127.5,
       imageStd: 127.5,
       asynch: true
@@ -98,7 +98,7 @@ class ResultsScreenState extends State<ResultsScreen> {
                             height: 25,
                             thickness: 1,
                           ),
-                          (_output != null) ? Text(
+                          (_output != null && _output!.length != 0) ? Text(
                               'The digit is: ${_output?[0]['label']}.',
                               style: TextStyle(
                                 color: Colors.white,
