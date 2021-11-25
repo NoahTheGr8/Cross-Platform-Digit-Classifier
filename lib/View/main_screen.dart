@@ -22,12 +22,10 @@ class MyApp extends StatelessWidget {
 
         // Define the default font family.
         fontFamily: 'RaleWay',
-
       ),
       home: Scaffold(
         appBar: AppBar(title: const Text(_title)),
         body: const MyStatefulWidget(),
-
       ),
     );
   }
@@ -46,7 +44,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     final ButtonStyle style =
-    ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
+        ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
     ImagePicker picker = ImagePicker();
     File file;
     return Center(
@@ -54,8 +52,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           InkWell(
-
-            onTap: () async{
+            onTap: () async {
               //take photo
               XFile? photo = await picker.pickImage(source: ImageSource.camera);
 
@@ -63,7 +60,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               file = File(photo!.path);
 
               //pass the image to get processed
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ResultsScreen(file)));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ResultsScreen(file)));
             },
             child: Container(
               decoration: BoxDecoration(
@@ -78,20 +76,19 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 ],
               ),
               alignment: Alignment.center,
-              padding: EdgeInsets.symmetric(
-                  vertical: 14, horizontal: 16),
+              padding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
               width: MediaQuery.of(context).size.width * 0.8,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'Take Photo',
-                    style: TextStyle(color: Color(0xFF0F0BDB)),
+                    style: TextStyle(color: Color(0xFF355C7D)),
                   ),
                   SizedBox(
                     width: 10,
                   ),
-                  Icon(Icons.add_a_photo_outlined, color: Color(0xFF0F0BDB))
+                  Icon(Icons.add_a_photo_outlined, color: Color(0xFF355C7D))
                 ],
               ),
             ),
@@ -99,26 +96,49 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           SizedBox(
             height: 10,
           ),
-
-
-
           const SizedBox(height: 30),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Color(0xFF355C7D), // background
-              onPrimary: Colors.white, // foreground
-            ),
-            onPressed: () async{
+          InkWell(
+            onTap: () async {
               //select photo from gallery
-              XFile? photo = await picker.pickImage(source: ImageSource.gallery);
+              XFile? photo =
+                  await picker.pickImage(source: ImageSource.gallery);
 
               //Convert the image to a File object
               file = File(photo!.path);
 
               //pass the image to get processed
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ResultsScreen(file)));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ResultsScreen(file)));
             },
-            child: const Text('Select from Gallery'),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: Colors.blue.withOpacity(0.1),
+                    blurRadius: 1,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Select Photo from Gallery',
+                    style: TextStyle(color: Color(0xFF355C7D)),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Icon(Icons.add_photo_alternate_outlined, color: Color(0xFF355C7D))
+                ],
+              ),
+            ),
           ),
         ],
       ),
