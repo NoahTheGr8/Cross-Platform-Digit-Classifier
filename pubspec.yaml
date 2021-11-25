@@ -14,7 +14,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   tflite:
   meta: ^1.1.1
-  image_picker:
   path_provider:
 
 dev_dependencies:
@@ -26,5 +25,3 @@ flutter:
   assets:
     - assets/labels.txt
     - assets/MNIST-CNN.tflite
-    - assets/images/9.jpg
-    - assets/images/7.png
