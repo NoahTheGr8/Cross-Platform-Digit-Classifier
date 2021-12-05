@@ -14,7 +14,7 @@ class ResultsScreen extends StatefulWidget {
 class ResultsScreenState extends State<ResultsScreen> {
   bool _loading = true;
   File _image;
-  List<dynamic>? _output;
+  List<dynamic>? _output; //List<dynamic> _output;
   final picker = ImagePicker();
   ResultsScreenState(this._image);
 
@@ -98,8 +98,8 @@ class ResultsScreenState extends State<ResultsScreen> {
                             height: 25,
                             thickness: 1,
                           ),
-                          (_output != null && _output!.length != 0) ? Text(
-                              'The digit is: ${_output?[0]['label']}.',
+                          (_output != null && _output!.length != 0) ? Text(// _output!.length
+                              'The digit is: ${_output![0]['label']}.',//_output?[0]['label']
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -120,6 +120,18 @@ class ResultsScreenState extends State<ResultsScreen> {
                             },
                             child: const Text('Classify Another Image'),
                           ),
+
+
+
+
+
+
+
+
+
+
+
+
                           const SizedBox(height: 30)
                         ],
                       )
