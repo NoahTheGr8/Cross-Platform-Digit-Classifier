@@ -2,12 +2,13 @@ import 'package:digit_classifier/View/results_screen.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'SaveClassifications.dart';
 
 void main() => runApp(const MyApp());
 
 /// This is the main application widget.
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({Key key}) : super(key: key);
 
   static const String _title = 'Digit Classifier';
 
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
 
 /// This is the stateful widget that the main application instantiates.
 class MyStatefulWidget extends StatefulWidget {
-  const MyStatefulWidget({Key? key}) : super(key: key);
+  const MyStatefulWidget({Key key}) : super(key: key);
 
   @override
   State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
@@ -47,6 +48,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
     ImagePicker picker = ImagePicker();
     File file;
+    var result;
+
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -54,13 +57,13 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           InkWell(
             onTap: () async {
               //take photo
-              XFile? photo = await picker.pickImage(source: ImageSource.camera);
+              XFile photo = await picker.pickImage(source: ImageSource.camera);
 
               //convert the photo to a file object
-              file = File(photo!.path);
+              file = File(photo.path);
 
-              //pass the image to get processed
-              Navigator.push(context,
+              //pass the image to get processed - result is the classification
+              result = Navigator.push(context,
                   MaterialPageRoute(builder: (context) => ResultsScreen(file)));
             },
             child: Container(
@@ -100,15 +103,16 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           InkWell(
             onTap: () async {
               //select photo from gallery
-              XFile? photo =
+              XFile photo =
                   await picker.pickImage(source: ImageSource.gallery);
 
               //Convert the image to a File object
-              file = File(photo!.path);
+              file = File(photo.path);
 
               //pass the image to get processed
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ResultsScreen(file)));
+              result = Navigator.push(context,
+                   MaterialPageRoute(builder: (context) => ResultsScreen(file)));
+              //TODO store result into db
             },
             child: Container(
               decoration: BoxDecoration(
@@ -140,6 +144,55 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               ),
             ),
           ),
+
+          const SizedBox(height: 30),
+
+
+          InkWell(
+            onTap: () async {
+              //select photo from gallery
+              XFile photo =
+              await picker.pickImage(source: ImageSource.gallery);
+
+              //Convert the image to a File object
+              file = File(photo.path);
+
+              //pass the image to get processed
+              result = Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ResultsScreen(file)));
+              //TODO store result into db
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: Colors.blue.withOpacity(0.1),
+                    blurRadius: 1,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Previous Classifications',
+                    style: TextStyle(color: Color(0xFF355C7D)),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Icon(Icons.dashboard_sharp , color: Color(0xFF355C7D))
+                ],
+              ),
+            ),
+          ),
+
         ],
       ),
     );

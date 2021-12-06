@@ -14,7 +14,7 @@ class ResultsScreen extends StatefulWidget {
 class ResultsScreenState extends State<ResultsScreen> {
   bool _loading = true;
   File _image;
-  List<dynamic>? _output; //List<dynamic> _output;
+  List<dynamic> _output; //List<dynamic> _output;
   final picker = ImagePicker();
   ResultsScreenState(this._image);
 
@@ -98,39 +98,99 @@ class ResultsScreenState extends State<ResultsScreen> {
                             height: 25,
                             thickness: 1,
                           ),
-                          (_output != null && _output!.length != 0) ? Text(// _output!.length
-                              'The digit is: ${_output![0]['label']}.',//_output?[0]['label']
+                          (_output != null && _output.length != 0) ? Text(// _output!.length
+                              'The digit is: ${_output[0]['label']}.',//_output?[0]['label']
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
                               )
                           )
                               : Text('Image not classified.'),
-                          Divider(
-                              height: 25,
-                              thickness: 1
-                          ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: Color(0xFF355C7D), // background
-                              onPrimary: Colors.white, // foreground
-                            ),
-                            onPressed: () async {
+
+                          //---------------------------------------
+
+                          InkWell(
+                            onTap: () async {
                               Navigator.pop(context);
                             },
-                            child: const Text('Classify Another Image'),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                    color: Colors.blue.withOpacity(0.1),
+                                    blurRadius: 1,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Classify Another Image',
+                                    style: TextStyle(color: Color(0xFF355C7D)),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Icon(Icons.add_photo_alternate_outlined, color: Color(0xFF355C7D))
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          Divider(
+                              height: 25,
+                              thickness: 0
                           ),
 
 
+                          InkWell(
+                            onTap: () async {
+                              Navigator.pop(context);
+                              final snackBar = SnackBar(
+                                content: const Text('Classification Stored Successfully.'),
+                                duration: Duration(seconds: 2),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                    color: Colors.blue.withOpacity(0.1),
+                                    blurRadius: 1,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Store Classification',
+                                    style: TextStyle(color: Color(0xFF355C7D)),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Icon(Icons.download , color: Color(0xFF355C7D))
+                                ],
+                              ),
+                            ),
+                          ),
 
-
-
-
-
-
-
-
-
+                          //--------------------------------------------
 
                           const SizedBox(height: 30)
                         ],

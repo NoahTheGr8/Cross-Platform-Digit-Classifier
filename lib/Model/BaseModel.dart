@@ -20,7 +20,7 @@ class BaseModel extends Model {
 
 
   /// The date chosen by the user.  Needed to be able to display what the user picks on the entry screen.
-  late String chosenDate;
+  String chosenDate;
 
 
   /// For display of the date chosen by the user.
