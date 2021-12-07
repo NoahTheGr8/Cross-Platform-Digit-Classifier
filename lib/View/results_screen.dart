@@ -1,8 +1,14 @@
+import 'package:digit_classifier/Model/Classification.dart';
+import 'package:digit_classifier/Model/ClassificationDBWorker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
 import 'dart:io';
+import 'package:digit_classifier/Model/Utility.dart';
+
+
+///The results screen calls the machine learning model, classifies, and displays the results.
 
 class ResultsScreen extends StatefulWidget {
   File _image;
@@ -12,15 +18,16 @@ class ResultsScreen extends StatefulWidget {
 }
 
 class ResultsScreenState extends State<ResultsScreen> {
-  bool _loading = true;
   File _image;
-  List<dynamic>? _output; //List<dynamic> _output;
+  List<dynamic> _output; //List<dynamic> _output;
   final picker = ImagePicker();
+  ClassificationDBWorker dbHelper;
   ResultsScreenState(this._image);
 
   @override
   initState() {
     super.initState();
+    dbHelper = ClassificationDBWorker();
     loadModel().then((value) {setState(() {});
     });
   }
@@ -33,33 +40,31 @@ class ResultsScreenState extends State<ResultsScreen> {
 
   loadModel() async {
     await Tflite.loadModel(model: 'assets/NN/MNIST-CNN.tflite', labels: 'assets/NN/labels.txt');
-    classifyImage(_image);
+    classifyImage();
   }
 
-  classifyImage(File image) async {
+
+  classifyImage() async {
     _output = await Tflite.runModelOnImage(
-      path: image.path,
+      path: _image.path,
       numResults: 5,
       threshold: 0,
       imageMean: 127.5,
       imageStd: 127.5,
       asynch: true
     );
-    print("inside classify " + _output.toString());
   }
 
 
   @override
   Widget build(BuildContext context) {
-    classifyImage(_image);
-    print('results_screen - 0 errors?');
-    print(_image.toString());
-    print(_output);
+    ClassificationDBWorker dbHelper = ClassificationDBWorker();
+    classifyImage();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black12,
         title: Text(
-          'MNIST-trained Digit Classifier',
+          'Digit Classifier',
           style: TextStyle(
             color: Colors.white,
             fontSize: 20,
@@ -98,8 +103,9 @@ class ResultsScreenState extends State<ResultsScreen> {
                             height: 25,
                             thickness: 1,
                           ),
-                          (_output != null && _output!.length != 0) ? Text(// _output!.length
-                              'The digit is: ${_output![0]['label']}.',//_output?[0]['label']
+                          ///Depending on the threshold we use, it's possible the predictions are empty. So we need to make sure that we can output something before accessing.
+                          (_output != null && _output.length != 0) ? Text(
+                              'The digit is: ${_output[0]['label']}.',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -118,21 +124,31 @@ class ResultsScreenState extends State<ResultsScreen> {
                             onPressed: () async {
                               Navigator.pop(context);
                             },
-                            child: const Text('Classify Another Image'),
+                            child: Text('Discard classification and return to main menu.'),
                           ),
-
-
-
-
-
-
-
-
-
-
-
-
-                          const SizedBox(height: 30)
+                          Divider(
+                              height: 25,
+                              thickness: 1
+                          ),
+                          ///Checking that we have an actual prediction to save. If we do, we display a "save classification" button. If we don't, we don't display it.
+                          (_output.length == 0) ? Container() :
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Color(0xFF355C7D), // background
+                              onPrimary: Colors.white, // foreground
+                            ),
+                            onPressed: () async {
+                              String imgString = Utility.base64String(_image.readAsBytesSync());
+                              ///Making sure a prediction was actually made
+                              if (_output.length != 0) {
+                                int pic_class = int.parse(_output[0]['label']);
+                                Classification classification = Classification(0, imgString, pic_class);
+                                dbHelper.save(classification);
+                              }
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Save classification and return to main menu.')
+                          )
                         ],
                       )
                   )

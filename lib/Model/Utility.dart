@@ -15,7 +15,7 @@ Future selectDate(BuildContext inContext, BaseModel inModel, String inDateString
   }
 
   // Now request the date.
-  DateTime? picked = await showDatePicker(
+  DateTime picked = await showDatePicker(
     context : inContext,
     initialDate : initialDate,
     firstDate : DateTime(1900),
