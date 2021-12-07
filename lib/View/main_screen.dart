@@ -1,15 +1,15 @@
+import 'package:digit_classifier/View/previous_classifications.dart';
 import 'package:digit_classifier/View/results_screen.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'SaveClassifications.dart';
+
 
 void main() => runApp(const MyApp());
 
 /// This is the main application widget.
 class MyApp extends StatelessWidget {
   const MyApp({Key key}) : super(key: key);
-
   static const String _title = 'Digit Classifier';
 
   @override
@@ -17,11 +17,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: _title,
       theme: ThemeData(
-        // Define the default brightness and colors.
         brightness: Brightness.dark,
         primaryColor: Color(0xFF355C7D),
-
-        // Define the default font family.
         fontFamily: 'RaleWay',
       ),
       home: Scaffold(
@@ -32,7 +29,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-/// This is the stateful widget that the main application instantiates.
 class MyStatefulWidget extends StatefulWidget {
   const MyStatefulWidget({Key key}) : super(key: key);
 
@@ -40,16 +36,11 @@ class MyStatefulWidget extends StatefulWidget {
   State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
 }
 
-/// This is the private State class that goes with MyStatefulWidget.
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
-    final ButtonStyle style =
-        ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
     ImagePicker picker = ImagePicker();
     File file;
-    var result;
-
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -58,12 +49,11 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             onTap: () async {
               //take photo
               XFile photo = await picker.pickImage(source: ImageSource.camera);
-
               //convert the photo to a file object
               file = File(photo.path);
 
-              //pass the image to get processed - result is the classification
-              result = Navigator.push(context,
+              //pass the image to get processed
+              Navigator.push(context,
                   MaterialPageRoute(builder: (context) => ResultsScreen(file)));
             },
             child: Container(
@@ -103,16 +93,14 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           InkWell(
             onTap: () async {
               //select photo from gallery
-              XFile photo =
-                  await picker.pickImage(source: ImageSource.gallery);
+              XFile photo = await picker.pickImage(source: ImageSource.gallery);
 
               //Convert the image to a File object
               file = File(photo.path);
 
               //pass the image to get processed
-              result = Navigator.push(context,
-                   MaterialPageRoute(builder: (context) => ResultsScreen(file)));
-              //TODO store result into db
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ResultsScreen(file)));
+
             },
             child: Container(
               decoration: BoxDecoration(
@@ -144,23 +132,11 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               ),
             ),
           ),
-
           const SizedBox(height: 30),
-
-
           InkWell(
             onTap: () async {
-              //select photo from gallery
-              XFile photo =
-              await picker.pickImage(source: ImageSource.gallery);
-
-              //Convert the image to a File object
-              file = File(photo.path);
-
-              //pass the image to get processed
-              result = Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ResultsScreen(file)));
-              //TODO store result into db
+              ///Takes you to review stored classifications from previous use.
+              Navigator.push(context, MaterialPageRoute(builder: (context) => PreviousClassifications()));
             },
             child: Container(
               decoration: BoxDecoration(
@@ -181,18 +157,17 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Previous Classifications',
+                    'View previous classifications',
                     style: TextStyle(color: Color(0xFF355C7D)),
                   ),
                   SizedBox(
                     width: 10,
                   ),
-                  Icon(Icons.dashboard_sharp , color: Color(0xFF355C7D))
+                  Icon(Icons.art_track, color: Color(0xFF355C7D))
                 ],
               ),
             ),
-          ),
-
+          )
         ],
       ),
     );
